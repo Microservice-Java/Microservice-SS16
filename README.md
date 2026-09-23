@@ -26,6 +26,17 @@ Repository lưu trữ bài tập thực hành về **Bộ nhớ đệm phân tá
 
 ---
 
+### [Bài Tập 3: Hệ Thống Quản Lý Tồn Kho - Cache-Aside Pattern](./BaiTap3)
+- **Mục tiêu**: Thiết kế và triển khai chuẩn mực Cache-Aside Pattern cho hệ thống Quản lý Tồn kho Tiki, đảm bảo số lượng tồn kho hiển thị tức thì và chính xác khi có cập nhật.
+- **Giải pháp**:
+  - **Luồng Đọc (Read)**: `@Cacheable` kiểm tra Redis $\rightarrow$ Miss $\rightarrow$ Lấy từ RDBMS DB $\rightarrow$ Nạp Redis $\rightarrow$ Trả về DTO.
+  - **Luồng Ghi (Write)**: Cập nhật DB trước $\rightarrow$ `@CacheEvict` hủy bỏ cache cũ đằng sau để đảm bảo tính nhất quán.
+  - **Bẫy Dữ liệu (Negative Quantity)**: Fail-fast check `newQuantity < 0` ném `IllegalArgumentException`.
+  - **Giảm thiểu Rủi ro Redis Evict Failure**: Áp dụng **Short TTL (5 phút)** cho cache keys kết hợp `CustomCacheErrorHandler` để dữ liệu đệm bị lỗi tự động hết hạn ngắn khi Redis gặp sự cố.
+- **Báo cáo chi tiết & Sơ đồ Sequence**: [BaoCao_BaiTap3.md](./BaiTap3/BaoCao_BaiTap3.md)
+
+---
+
 ## Hướng dẫn chạy và kiểm thử
 
 ### Bài Tập 1
@@ -39,4 +50,11 @@ cd BaiTap1
 cd BaiTap2
 ./gradlew test
 ```
+
+### Bài Tập 3
+```bash
+cd BaiTap3
+./gradlew test
+```
+
 
