@@ -16,6 +16,16 @@ Repository lưu trữ bài tập thực hành về **Bộ nhớ đệm phân tá
 
 ---
 
+### [Bài Tập 2: Khắc Phục Lỗi "Cache Không Hoạt Động" - Thiếu @EnableCaching](./BaiTap2)
+- **Mục tiêu**: Phân tích nguyên nhân kỹ thuật khiến `@Cacheable` bị vô hiệu hóa do thiếu `@EnableCaching` trên Spring Application làm ngắt kết nối Spring AOP Proxy và `CacheInterceptor`.
+- **Giải pháp**:
+  - **Kích hoạt Spring Cache AOP Engine**: Bổ sung `@EnableCaching` tại `UserApplication.java` và đăng ký `ConcurrentMapCacheManager` trong `CacheConfig.java`.
+  - **Kiểm soát Tham số & Kết quả Null**: Cấu hình `@Cacheable(value = "users", key = "#userId", condition = "#userId != null && !#userId.trim().isEmpty()", unless = "#result == null")` trên `UserService.getUserById()` giúp chống lãng phí RAM và tránh lưu cache kết quả `null`.
+  - **Fail-Fast Validation**: Tự động quăng `IllegalArgumentException` khi `userId` null hoặc chuỗi rỗng.
+- **Báo cáo chi tiết & Phân tích AOP**: [BaoCao_BaiTap2.md](./BaiTap2/BaoCao_BaiTap2.md)
+
+---
+
 ## Hướng dẫn chạy và kiểm thử
 
 ### Bài Tập 1
@@ -23,3 +33,10 @@ Repository lưu trữ bài tập thực hành về **Bộ nhớ đệm phân tá
 cd BaiTap1
 ./gradlew test
 ```
+
+### Bài Tập 2
+```bash
+cd BaiTap2
+./gradlew test
+```
+
