@@ -37,6 +37,16 @@ Repository lưu trữ bài tập thực hành về **Bộ nhớ đệm phân tá
 
 ---
 
+### [Bài Tập 4: Chiến Lược Cập Nhật Cache - Xóa Hay Ghi Đè? (@CacheEvict vs @CachePut)](./BaiTap4)
+- **Mục tiêu**: Phân tích và so sánh 2 chiến lược đồng bộ đệm `@CacheEvict` (xóa) vs `@CachePut` (ghi đè), lựa chọn chiến lược tối ưu cho hệ thống thương mại điện tử có tỷ lệ đọc/ghi 100:1.
+- **Giải pháp**:
+  - **Lựa chọn Chiến lược Tối ưu**: Chọn **`@CacheEvict`** để chống Race Condition khi ghi đồng thời (tránh DB lưu B nhưng Redis lưu A), đồng thời tiết kiệm dung lượng RAM Redis.
+  - **Mã nguồn Triển khai**: `ProductService` tích hợp `@Cacheable` cho luồng đọc lười nạp và `@CacheEvict` cho luồng ghi cập nhật sản phẩm.
+  - **Fail-Fast Validation & Error Handling**: Kiểm tra tham số âm (`price < 0`, `stockQuantity < 0`), `productId` rỗng và tích hợp `CustomCacheErrorHandler` cùng Short TTL (10 phút) giảm thiểu rủi ro khi evict thất bại.
+- **Báo cáo chi tiết & Bảng so sánh 4 tiêu chí**: [BaoCao_BaiTap4.md](./BaiTap4/BaoCao_BaiTap4.md)
+
+---
+
 ## Hướng dẫn chạy và kiểm thử
 
 ### Bài Tập 1
@@ -56,5 +66,12 @@ cd BaiTap2
 cd BaiTap3
 ./gradlew test
 ```
+
+### Bài Tập 4
+```bash
+cd BaiTap4
+./gradlew test
+```
+
 
 
